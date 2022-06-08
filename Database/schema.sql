@@ -12,7 +12,7 @@ CREATE TABLE products (
   slogan VARCHAR(300) NOT NULL,
   description VARCHAR(500) NOT NULL,
   category VARCHAR(300) NOT NULL,
-  default_price VARCHAR(50 ) NOT NULL
+  default_price VARCHAR(50) NOT NULL
 );
 
 
@@ -21,7 +21,7 @@ CREATE TABLE features (
   product_id INT NOT NULL,
   feature VARCHAR(50) NOT NULL,
   value VARCHAR(50) NOT NULL,
-  CONSTRAINT fk_Features_Products FOREIGN KEY (product_id) REFERENCES products(id)
+  CONSTRAINT features_id FOREIGN KEY(product_id) REFERENCES products(id)
 );
 
 
@@ -29,7 +29,7 @@ CREATE TABLE related_products (
   id INT UNIQUE PRIMARY KEY NOT NULL,
   curr_prod_id INT NOT NULL,
   related_prod_id INT NOT NULL,
-  CONSTRAINT fk_RelatedProducts_Products FOREIGN KEY (curr_prod_id) REFERENCES products(id)
+  CONSTRAINT related_products_id FOREIGN KEY(curr_prod_id) REFERENCES products(id)
 );
 
 CREATE TABLE styles (
@@ -39,7 +39,7 @@ CREATE TABLE styles (
   sale_price VARCHAR(50) NOT NULL,
   original_price VARCHAR(50) NOT NULL ,
   default_style VARCHAR NOT NULL,
-  CONSTRAINT fk_Styles_Products FOREIGN KEY (product_id) REFERENCES products(id)
+  CONSTRAINT styles_id FOREIGN KEY(productId) REFERENCES products(id)
 );
 
 
@@ -48,16 +48,16 @@ CREATE TABLE photos (
   style_id INT NOT NULL,
   url TEXT NOT NULL,
   thumbnail_URL TEXT NOT NULL,
- CONSTRAINT fk_Photos_Styles FOREIGN KEY (style_id) REFERENCES styles(id)
+  CONSTRAINT photos_id FOREIGN KEY(style_id) REFERENCES styles(id)
 );
 
 
 CREATE TABLE skus (
-  id INT UNIQUE PRIMARY KEY NULL,
+  id INT UNIQUE PRIMARY KEY NOT NULL,
   style_id INT NOT NULL,
   size VARCHAR(8) NOT NULL,
   quantity INT NOT NULL,
-  CONSTRAINT fk_Skus_Styles FOREIGN KEY (style_id) REFERENCES styles(id)
+  CONSTRAINT kus_id FOREIGN KEY(style_id) REFERENCES styles(id)
 );
 
 Copy products
