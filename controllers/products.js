@@ -2,8 +2,8 @@ var models = require('../models');
 
 module.exports = {
   getProducts: (req, res) => {
-    let page = req.query.page;
-    let count = req.query.count;
+    let page = req.query.page || 1;
+    let count = req.query.count || 5;
     models.products.getProducts(page, count, (err, result) => {
       if (err) {
         res.sendStatus(404);

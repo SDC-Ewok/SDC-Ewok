@@ -1,7 +1,7 @@
 var db = require('../database/index.js');
 
 module.exports = {
-  getProducts: (page = 1, count = 5, cb) => {
+  getProducts: (page, count, cb) => {
     const queryStr = `SELECT * FROM products ORDER BY id limit ${count} OFFSET ${(page - 1) * count}`;
     db.query(queryStr, (err, res) => {
       if (err) {
@@ -16,7 +16,7 @@ module.exports = {
     const queryStr = `SELECT products.*,
     (SELECT json_build_object(
       'features', (SELECT json_agg(row_to_json(features))
-      FROM (SELECT feature, value from features WHERE features.product_id=${id})features)))
+      FROM (SELECT feature, value from features WHERE features.product_id=${id})features))
     FROM products
     WHERE products.id = ${id}`;
     db.query(queryStr, (err, res) => {
@@ -67,10 +67,9 @@ module.exports = {
 };
 
 
+// SELECT json_build_object(
+//   'features', (SELECT json_agg(row_to_json(features))
+//   FROM (SELECT feature, value from features WHERE features.product_id=10)features))
 
-// SELECT products.*,
-//    (SELECT json_build_object(
-//       'features', (SELECT json_agg(row_to_json(features))
-//       FROM (SELECT feature, value from features WHERE features.product_id=7)features)))
-//     FROM products
-//     WHERE products.id = 7
+//array of object of features:
+// SELECT json_agg(row_to_json(features)) FROM (SELECT feature, value from features WHERE features.product_id=10)features;
