@@ -47,5 +47,16 @@ module.exports = {
         res.send(result);
       }
     });
+  },
+
+  getFeatures: (req, res) => {
+    var id = req.params.product_id;
+    models.products.getFeatures(id, (err, result) => {
+      if (err) {
+        res.sendStatus(404);
+      } else {
+        res.send(result);
+      }
+    });
   }
 };

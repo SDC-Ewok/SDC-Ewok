@@ -13,7 +13,12 @@ module.exports = {
   },
 
   getProductInfo: (id, cb) => {
-    const queryStr = `SELECT products.*, features.id as featureid, features.product_id as productid, features.feature, features.value FROM products LEFT JOIN features ON products.id = features.product_id WHERE products.id = ${id}`;
+    const queryStr = `SELECT products.*,
+    (SELECT json_build_object(
+      'features', (SELECT json_agg(row_to_json(features))
+      FROM (SELECT feature, value from features WHERE features.product_id=${id})features)))
+    FROM products
+    WHERE products.id = ${id}`;
     db.query(queryStr, (err, res) => {
       if (err) {
         cb(err);
@@ -31,8 +36,8 @@ module.exports = {
         cb(null, res.rows);
       }
     });
-
   },
+
   getRelatedProduct: (id, cb) => {
     const queryStr = `SELECT related_prod_id FROM related_products WHERE curr_prod_id = ${id}`;
     db.query(queryStr, (err, res) => {
@@ -43,5 +48,29 @@ module.exports = {
         cb(null, relatedProducts);
       }
     });
+  },
+
+  getFeatures: (id, cb) => {
+    let queryStrFeatures= `
+    SELECT json_build_object(
+      'features', (SELECT json_agg(row_to_json(features))
+      FROM (SELECT feature, value from features WHERE features.product_id=${id})features))
+    `;
+    db.query(queryStrFeatures, (err, res) => {
+      if (err) {
+        cb(err);
+      } else {
+        cb(null, res.rows);
+      }
+    });
   }
 };
+
+
+
+// SELECT products.*,
+//    (SELECT json_build_object(
+//       'features', (SELECT json_agg(row_to_json(features))
+//       FROM (SELECT feature, value from features WHERE features.product_id=7)features)))
+//     FROM products
+//     WHERE products.id = 7
