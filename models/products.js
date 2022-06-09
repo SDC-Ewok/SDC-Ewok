@@ -13,12 +13,10 @@ module.exports = {
   },
 
   getProductInfo: (id, cb) => {
-    const queryStr = `SELECT products.*,
-    (SELECT json_build_object(
-      'features', (SELECT json_agg(row_to_json(features))
-      FROM (SELECT feature, value from features WHERE features.product_id=${id})features))
-    FROM products
-    WHERE products.id = ${id}`;
+    const queryStr = `select products.*,
+    (select
+      json_agg(json_build_object('features', features.feature, 'value', features.value)) from features where features.product_id=${id}) as features
+    from Products Where products.id = ${id};`;
     db.query(queryStr, (err, res) => {
       if (err) {
         cb(err);
@@ -28,12 +26,33 @@ module.exports = {
     });
   },
   getProductStyles: (id, cb) => {
-    const queryStr = ``;
+    const queryStr = `
+    select
+      styles.id AS "style_id",
+      name,
+      original_price,
+      sale_price,
+      default_style AS "default?",
+      (select
+        json_agg(json_build_object('thumbnail_url', photos.thumbnail_url, 'url', photos.url))
+          from photos where photos.style_id=styles.id) As "photos",
+      (select
+        json_object_agg(skus.id, json_build_object('quantity', skus.quantity, 'size', skus.quantity))
+        from skus where skus.style_id=styles.id) AS "skus"
+      from
+      styles
+      WHERE styles.productId=${id}
+      ORDER BY styles.id
+    `;
     db.query(queryStr, (err, res) => {
       if (err) {
         cb(err);
       } else {
-        cb(null, res.rows);
+        const productStyles = {
+          product_id: id,
+          results: res.rows
+        };
+        cb(null, productStyles);
       }
     });
   },
@@ -51,7 +70,7 @@ module.exports = {
   },
 
   getFeatures: (id, cb) => {
-    let queryStrFeatures= `
+    let queryStrFeatures = `
     SELECT json_build_object(
       'features', (SELECT json_agg(row_to_json(features))
       FROM (SELECT feature, value from features WHERE features.product_id=${id})features))
@@ -63,7 +82,36 @@ module.exports = {
         cb(null, res.rows);
       }
     });
-  }
+  },
+
+  getProductPhotos: (id, cb) => {
+    const queryStr = `
+    select
+    json_agg(json_build_object('thumbnail_url', photos.thumbnail_url, 'url', photos.url))
+    from photos where photos.style_id=${id}`;
+    db.query(queryStr, (err, res) => {
+      if (err) {
+        cb(err);
+      } else {
+        cb(null, res.rows);
+      }
+    });
+  },
+
+  getProductSkus: (id, cb) => {
+    const queryStr = `
+    select
+    json_object_agg(skus.id, json_build_object('quantity', skus.quantity, 'size', skus.quantity))
+    from skus where skus.style_id=${id}
+    `;
+    db.query(queryStr, (err, res) => {
+      if (err) {
+        cb(err);
+      } else {
+        cb(null, res.rows);
+      }
+    });
+  },
 };
 
 
@@ -73,3 +121,10 @@ module.exports = {
 
 //array of object of features:
 // SELECT json_agg(row_to_json(features)) FROM (SELECT feature, value from features WHERE features.product_id=10)features;
+
+// (select
+//   json_agg(json_build_object('thumbnail_url', photos.thumbnail_url, 'url', photos.url))
+//   from photos where photos.style_id=${id}) As "photos",
+// (select
+//   json_object_agg(skus.id, json_build_object('quantity', skus.quantity, 'size', skus.quantity))
+//   from skus where skus.style_id=${id}) AS "skus"

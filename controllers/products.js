@@ -30,10 +30,10 @@ module.exports = {
       if (err) {
         res.sendStatus(404);
       } else {
-        const result = {
-          productId: id,
-          results: result,
-        };
+        // const result = {
+        //   productId: id,
+        //   results: result,
+        // };
         res.send(result);
       }
     });
@@ -52,6 +52,26 @@ module.exports = {
   getFeatures: (req, res) => {
     var id = req.params.product_id;
     models.products.getFeatures(id, (err, result) => {
+      if (err) {
+        res.sendStatus(404);
+      } else {
+        res.send(result);
+      }
+    });
+  },
+  getPhotos: (req, res) => {
+    var id = req.params.product_id;
+    models.products.getProductPhotos(id, (err, result) => {
+      if (err) {
+        res.sendStatus(404);
+      } else {
+        res.send(result);
+      }
+    });
+  },
+  getSkus: (req, res) => {
+    var id = req.params.product_id;
+    models.products.getProductSkus(id, (err, result) => {
       if (err) {
         res.sendStatus(404);
       } else {

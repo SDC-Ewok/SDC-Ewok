@@ -57,7 +57,7 @@ CREATE TABLE skus (
   style_id INT NOT NULL,
   size VARCHAR(8) NOT NULL,
   quantity INT NOT NULL,
-  CONSTRAINT kus_id FOREIGN KEY(style_id) REFERENCES styles(id)
+  CONSTRAINT skus_id FOREIGN KEY(style_id) REFERENCES styles(id)
 );
 
 Copy products
