@@ -1,7 +1,7 @@
 require('dotenv').config();
-const {Client} = require ('pg');
+const { Pool } = require ('pg');
 
-const client = new Client({
+const pool = new Pool({
   host: process.env.HOST,
   user: process.env.POSTGRESUSER,
   port: process.env.POSTGRESPORT,
@@ -9,4 +9,8 @@ const client = new Client({
   database: process.env.DATABASE
 });
 
-module.exports = client;
+pool.connect()
+  .then(() => console.log('Database connected successfully!'))
+  .catch((err) => console.log('error while connecting database', err));
+
+module.exports = pool;
