@@ -25,6 +25,7 @@ module.exports = {
       }
     });
   },
+
   getProductStyles: (id, cb) => {
     const queryStr = `
     select
