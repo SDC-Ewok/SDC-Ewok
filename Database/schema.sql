@@ -38,7 +38,7 @@ CREATE TABLE styles (
   name VARCHAR(50) NOT NULL ,
   sale_price VARCHAR(50) NOT NULL,
   original_price VARCHAR(50) NOT NULL ,
-  default_style VARCHAR NOT NULL,
+  default_style BOOLEAN NOT NULL,
   CONSTRAINT styles_id FOREIGN KEY(productId) REFERENCES products(id)
 );
 
@@ -57,7 +57,7 @@ CREATE TABLE skus (
   style_id INT NOT NULL,
   size VARCHAR(8) NOT NULL,
   quantity INT NOT NULL,
-  CONSTRAINT kus_id FOREIGN KEY(style_id) REFERENCES styles(id)
+  CONSTRAINT skus_id FOREIGN KEY(style_id) REFERENCES styles(id)
 );
 
 Copy products
