@@ -3,7 +3,7 @@ const { Pool } = require ('pg');
 
 const pool = new Pool({
   host: process.env.HOST,
-  user: process.env.POSTGRESUSER,
+  user: process.env.POSTFRESUSER,
   port: process.env.POSTGRESPORT,
   password: process.env.POSTGRESPASS,
   database: process.env.DATABASE

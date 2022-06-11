@@ -6,8 +6,9 @@ export let options = {
 };
 //Below randomize the endpoints
 export default function () {
+  // http.get(`http://localhost:3000/products`);
 // http.get(`http://localhost:3000/products?count=${Math.floor(Math.random() * (1000000 - 1 + 1)) + 1}&page=${Math.floor(Math.random() * (1000000 - 1 + 1)) + 1}`);
 // http.get(`http://localhost:3000/products/${Math.floor(Math.random() * (1000000 - 1 + 1)) + 1}`);
 // http.get(`http://localhost:3000/products/${Math.floor(Math.random() * (1000000 - 1 + 1)) + 1}/styles`);
-http.get(`http://localhost:3000/products/${Math.floor(Math.random() * (1000000 - 1 + 1)) + 1}/photos`);
+http.get(`http://localhost:3000/products/${Math.floor(Math.random() * (1000000 - 1 + 1)) + 1}/related`);
 }
