@@ -30,10 +30,6 @@ module.exports = {
       if (err) {
         res.sendStatus(404);
       } else {
-        // const result = {
-        //   productId: id,
-        //   results: result,
-        // };
         res.send(result);
       }
     });

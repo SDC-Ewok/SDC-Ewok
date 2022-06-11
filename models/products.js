@@ -15,7 +15,7 @@ module.exports = {
   getProductInfo: (id, cb) => {
     const queryStr = `select products.*,
     (select
-      json_agg(json_build_object('features', features.feature, 'value', features.value)) from features where features.product_id=${id}) as features
+      jsonb_agg(jsonb_build_object('features', features.feature, 'value', features.value)) from features where features.product_id=${id}) as features
     from Products Where products.id = ${id};`;
     db.query(queryStr, (err, res) => {
       if (err) {
@@ -35,10 +35,10 @@ module.exports = {
       sale_price,
       default_style AS "default?",
       (select
-        json_agg(json_build_object('thumbnail_url', photos.thumbnail_url, 'url', photos.url))
+        jsonb_agg(jsonb_build_object('thumbnail_url', photos.thumbnail_url, 'url', photos.url))
           from photos where photos.style_id=styles.id) As "photos",
       (select
-        json_object_agg(skus.id, json_build_object('quantity', skus.quantity, 'size', skus.quantity))
+        jsonb_object_agg(skus.id, jsonb_build_object('quantity', skus.quantity, 'size', skus.quantity))
         from skus where skus.style_id=styles.id) AS "skus"
       from
       styles
@@ -119,10 +119,8 @@ module.exports = {
 // SELECT json_build_object(
 //   'features', (SELECT json_agg(row_to_json(features))
 //   FROM (SELECT feature, value from features WHERE features.product_id=10)features))
-
 //array of object of features:
 // SELECT json_agg(row_to_json(features)) FROM (SELECT feature, value from features WHERE features.product_id=10)features;
-
 // (select
 //   json_agg(json_build_object('thumbnail_url', photos.thumbnail_url, 'url', photos.url))
 //   from photos where photos.style_id=${id}) As "photos",
