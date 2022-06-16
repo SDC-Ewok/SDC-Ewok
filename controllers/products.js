@@ -6,6 +6,7 @@ module.exports = {
     let count = req.query.count || 5;
     models.products.getProducts(page, count, (err, result) => {
       if (err) {
+        console.log('err', err);
         res.sendStatus(404);
       } else {
         res.send(result);
