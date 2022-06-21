@@ -3,6 +3,7 @@
 by Jessica Yu
 
 Backend system for a product overview and related products microservice for an e-commerce web app. 
+
 ## Technologies Used
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
@@ -36,12 +37,20 @@ npm start
 ```
 
 ## API Endpoints
+All Queries take parameters as Query strings unless it is in the endpoint\
+All responses should return status code `200 OK`
 
 ## GET Products
 
-`/products`
+`/products` Retrieves the list of products
 
-Yields the following data output: 
+#### Parameters
+| Parameter | Type    | Description                                               |
+|-----------|---------|-----------------------------------------------------------|
+| page      | Integer | Selects the page of results to return. Default 1.         |
+| count     | Integer | Specifies how many results per page to return. Default 5.|
+
+#### Response
 
 ```json
 [{
@@ -84,9 +93,14 @@ Yields the following data output:
 
 ## GET Specific Product
 
-`/products/:product_id`
+`/products/:product_id` Returns all product level information for a specified product id.
 
-Yields the following data output: 
+#### Parameters
+| Parameter  | Type    | Description                                       |
+|------------|---------|---------------------------------------------------|
+| product_id | Integer | Required ID of the Product requested |
+
+#### Response
 
 ```json
 {
@@ -106,9 +120,12 @@ Yields the following data output:
 ```
 ## GET Specific Product Styles
 
-`/products/:product_id/styles`
+`/products/:product_id/styles` Returns the all styles available for the given product.
 
-Yields the following data output: 
+#### Parameters
+| Parameter  | Type    | Description                                       |
+|------------|---------|---------------------------------------------------|
+| product_id | Integer | Required ID of the product for which data should be returned |
 
 ```json
 {
@@ -215,9 +232,13 @@ Yields the following data output:
 ```
 ## GET Related Products
 
-`/products/:product_id/related`
+`/products/:product_id/related` Returns the id's of products related to the product specified.
 
-Yields the following data output: 
+#### Parameters
+| Parameter  | Type    | Description                                       |
+|------------|---------|---------------------------------------------------|
+| product_id | Integer | Required ID of the product for which data should be returned |
+
 
 ```json
 [
